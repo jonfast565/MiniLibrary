@@ -1,2 +1,2 @@
 # MiniLibrary
-A small app for cataloging, storing, and renting out books
+A small graphical library app for storing books
