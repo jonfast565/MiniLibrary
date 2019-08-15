@@ -26,13 +26,16 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+        ui_scandiag.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+        ui_scandiag.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+        scandiag.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

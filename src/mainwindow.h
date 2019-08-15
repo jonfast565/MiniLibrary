@@ -26,8 +26,11 @@ private slots:
     void on_importButton_clicked();
     void on_actionQuit_triggered();
 
+    void on_reloadButton_clicked();
+    void reload_books();
+
 private:
-    QSqlDatabase* db = nullptr;
+    QSqlDatabase db;
     void setupInternal();
     void setupDatabaseConnection(QString server, int port, QString database, QString username, QString password);
     Ui::MainWindow *ui;

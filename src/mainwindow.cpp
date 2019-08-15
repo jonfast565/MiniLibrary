@@ -11,9 +11,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    db.close();
     delete ui;
-    db->close();
-    delete db;
 }
 
 void MainWindow::setupInternal()
@@ -48,21 +47,8 @@ void MainWindow::setupDatabaseConnection(QString server, int port, QString datab
     }
 
     qDebug("Connection established.");
-    this->db = &db;
-
-    QSqlQueryModel  *model = new QSqlQueryModel();
-    QSqlQuery *query = new QSqlQuery(*this->db);
-
-    query->prepare("select title, notes, number_of_pages, publish_date, url from books;");
-    query->exec();
-
-    model->setQuery(*query);
-    model->setHeaderData(0, Qt::Orientation::Horizontal, "Title", Qt::EditRole);
-    model->setHeaderData(1, Qt::Orientation::Horizontal, "Notes", Qt::EditRole);
-    model->setHeaderData(2, Qt::Orientation::Horizontal, "Number of Pages", Qt::EditRole);
-    model->setHeaderData(3, Qt::Orientation::Horizontal, "Publish Date", Qt::EditRole);
-    model->setHeaderData(4, Qt::Orientation::Horizontal, "Url", Qt::EditRole);
-    ui->tableView->setModel(model);
+    this->db = db;
+    this->reload_books();
 }
 
 void MainWindow::on_scanButton_clicked()
@@ -79,4 +65,25 @@ void MainWindow::on_actionQuit_triggered()
 {
     qDebug("Closing");
     this->close();
+}
+
+void MainWindow::on_reloadButton_clicked()
+{
+    this->reload_books();
+}
+
+void MainWindow::reload_books() {
+    QSqlQueryModel *model = new QSqlQueryModel();
+    QSqlQuery *query = new QSqlQuery(this->db);
+
+    query->prepare("select title, notes, number_of_pages, publish_date, url from books;");
+    query->exec();
+
+    model->setQuery(*query);
+    model->setHeaderData(0, Qt::Orientation::Horizontal, "Title", Qt::EditRole);
+    model->setHeaderData(1, Qt::Orientation::Horizontal, "Notes", Qt::EditRole);
+    model->setHeaderData(2, Qt::Orientation::Horizontal, "Number of Pages", Qt::EditRole);
+    model->setHeaderData(3, Qt::Orientation::Horizontal, "Publish Date", Qt::EditRole);
+    model->setHeaderData(4, Qt::Orientation::Horizontal, "Url", Qt::EditRole);
+    ui->tableView->setModel(model);
 }
