@@ -12,6 +12,8 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+    db->close();
+    delete db;
 }
 
 void MainWindow::setupInternal()
@@ -29,6 +31,7 @@ void MainWindow::setupInternal()
 void MainWindow::setupDatabaseConnection(QString server, int port, QString database, QString username, QString password)
 {
     QSqlDatabase db = QSqlDatabase(QSqlDatabase::addDatabase("QPSQL"));
+
     db.setHostName(server);
     db.setDatabaseName(database);
     db.setUserName(username);
@@ -45,6 +48,21 @@ void MainWindow::setupDatabaseConnection(QString server, int port, QString datab
     }
 
     qDebug("Connection established.");
+    this->db = &db;
+
+    QSqlQueryModel  *model = new QSqlQueryModel();
+    QSqlQuery *query = new QSqlQuery(*this->db);
+
+    query->prepare("select title, notes, number_of_pages, publish_date, url from books;");
+    query->exec();
+
+    model->setQuery(*query);
+    model->setHeaderData(0, Qt::Orientation::Horizontal, "Title", Qt::EditRole);
+    model->setHeaderData(1, Qt::Orientation::Horizontal, "Notes", Qt::EditRole);
+    model->setHeaderData(2, Qt::Orientation::Horizontal, "Number of Pages", Qt::EditRole);
+    model->setHeaderData(3, Qt::Orientation::Horizontal, "Publish Date", Qt::EditRole);
+    model->setHeaderData(4, Qt::Orientation::Horizontal, "Url", Qt::EditRole);
+    ui->tableView->setModel(model);
 }
 
 void MainWindow::on_scanButton_clicked()

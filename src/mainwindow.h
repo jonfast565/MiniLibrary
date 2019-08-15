@@ -6,6 +6,8 @@
 #include <QtSql/QSqlDatabase>
 #include <QMessageBox>
 #include <QtSql/QSqlError>
+#include <QtSql/QSqlQuery>
+#include <QtSql/QSqlQueryModel>
 
 namespace Ui {
 class MainWindow;
@@ -25,6 +27,7 @@ private slots:
     void on_actionQuit_triggered();
 
 private:
+    QSqlDatabase* db = nullptr;
     void setupInternal();
     void setupDatabaseConnection(QString server, int port, QString database, QString username, QString password);
     Ui::MainWindow *ui;
