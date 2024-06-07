@@ -5,7 +5,6 @@
 ScanDialog::ScanDialog(QWidget *parent)
     : QDialog(parent), ui(new Ui::ScanDialog) {
     ui->setupUi(this);
-    this->initDialog();
 
     this->searchTableModel = new QStandardItemModel(this);
 
@@ -13,6 +12,8 @@ ScanDialog::ScanDialog(QWidget *parent)
     ui->searchTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->searchTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->searchTable->setSelectionMode(QAbstractItemView::SingleSelection);
+
+    this->initDialog();
 }
 
 void ScanDialog::resetProgressAndHide() {
@@ -31,19 +32,44 @@ void ScanDialog::setProgressIndeterminate() {
     ui->progressBar->show();
 }
 
-void ScanDialog::clearSearchField() { ui->searchTextEdit->clear(); }
+void ScanDialog::clearSearchField() {
+    ui->searchTextEdit->clear();
+    ui->searchTextEdit->setFocus();
+}
+
+void ScanDialog::clearSearchResults() {
+    if (this->searchTableModel != nullptr && this->searchTableModel->rowCount() > 0) {
+        this->searchTableModel->clear();
+    }
+}
 
 void ScanDialog::clearResultsSection() {
     ui->authorTextEdit->clear();
     ui->authorTextEdit->setDisabled(true);
 
-    // title edit dialog redacted
     ui->titleTextEdit->clear();
     ui->titleTextEdit->setDisabled(true);
 
-    // isbn redacted as well
     ui->isbnTextEdit->clear();
     ui->isbnTextEdit->setDisabled(true);
+
+    ui->publishDateTextEdit->clear();
+    ui->publishDateTextEdit->setDisabled(true);
+
+    ui->publisherTextEdit->clear();
+    ui->publisherTextEdit->setDisabled(true);
+
+    ui->pageCountTextEdit->clear();
+    ui->pageCountTextEdit->setDisabled(true);
+
+    ui->descriptionTextEdit->clear();
+    ui->descriptionTextEdit->setDisabled(true);
+
+    ui->subtitleTextEdit->clear();
+    ui->subtitleTextEdit->setDisabled(true);
+
+    ui->languageTextEdit->clear();
+    ui->languageTextEdit->setDisabled(true);
 }
 
 void ScanDialog::disableSearchControls() {
@@ -93,6 +119,20 @@ void ScanDialog::requestBook() {
     });
 }
 
+void ScanDialog::selectFirstRow()
+{
+    if (this->searchTableModel->rowCount() == 1) {
+        QModelIndex firstRowIndex = this->searchTableModel->index(0, 0);
+        ui->searchTable->selectionModel()->select(firstRowIndex, QItemSelectionModel::Select | QItemSelectionModel::Rows);
+
+        ui->searchTable->selectionModel()->select(firstRowIndex, QItemSelectionModel::Select | QItemSelectionModel::Rows);
+        ui->searchTable->setCurrentIndex(firstRowIndex);
+        ui->searchTable->scrollTo(firstRowIndex);
+
+        emit ui->searchTable->clicked(firstRowIndex);
+    }
+}
+
 void ScanDialog::updateResultsSection(QList<Models::Book> &books) {
     this->searchTableModel->clear();
 
@@ -115,6 +155,8 @@ void ScanDialog::updateResultsSection(QList<Models::Book> &books) {
         auto bookItems = book.toQStandardItems();
         this->searchTableModel->appendRow(bookItems);
     }
+
+    selectFirstRow();
 }
 
 void ScanDialog::setResults() {
@@ -149,10 +191,21 @@ Models::Book ScanDialog::getCurrentBook() {
     return this->currentBook;
 }
 
+void ScanDialog::searchRequestAuto(const QString& searchTerm) {
+    if (isValidISBN(searchTerm)) {
+        this->ui->searchButton->click();
+    }
+}
+
 void ScanDialog::initDialog() {
     clearResultsSection();
     clearSearchField();
     resetProgressAndHide();
+    clearSearchResults();
+}
+
+void ScanDialog::resetDialog() {
+    this->initDialog();
 }
 
 ScanDialog::~ScanDialog() {

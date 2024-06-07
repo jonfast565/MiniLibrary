@@ -22,7 +22,9 @@ private:
 
 public:
     explicit DatabaseHandler(QObject *parent = nullptr);
+    ~DatabaseHandler();
     void initializeDatabase();
+    void closeDatabase();
     QList<Models::Book> getBooks();
     void saveBook(Models::Book& book);
 

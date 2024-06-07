@@ -56,11 +56,12 @@ QList<Models::Book> Models::Book::fromGoogleBooksApiJson(QJsonDocument &document
 
         auto authors = volumeInfoObject["authors"];
         if (!authors.isArray()) {
-            throw std::exception("Authors is not an array");
-        }
-        auto authorsObject = authors.toArray();
-        for (const QJsonValue& author: authorsObject) {
-            authorList.append(author.toString());
+            // throw std::exception("Authors is not an array");
+        } else {
+            auto authorsObject = authors.toArray();
+            for (const QJsonValue& author: authorsObject) {
+                authorList.append(author.toString());
+            }
         }
 
         auto id = itemObject["id"].toString();

@@ -28,6 +28,13 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QPushButton" name="clearButton">
+         <property name="text">
+          <string>Clear</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
      <item>
@@ -250,9 +257,43 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>clearButton</sender>
+   <signal>clicked()</signal>
+   <receiver>ScanDialog</receiver>
+   <slot>clearSearchField()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>343</x>
+     <y>18</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>195</x>
+     <y>209</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>searchTextEdit</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>ScanDialog</receiver>
+   <slot>searchRequestAuto(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>111</x>
+     <y>18</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>195</x>
+     <y>209</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>requestBook()</slot>
   <slot>setResults()</slot>
+  <slot>clearSearchField()</slot>
+  <slot>searchRequestAuto(QString)</slot>
  </slots>
 </ui>
