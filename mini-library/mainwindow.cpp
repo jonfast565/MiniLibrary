@@ -22,6 +22,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(this->searchTableModel, &QStandardItemModel::dataChanged, this, &MainWindow::onSearchTableItemEdited);
     this->refreshBooks();
+
+    qDebug() << "App path : " << qApp->applicationDirPath();
 }
 
 MainWindow::~MainWindow()
@@ -33,13 +35,14 @@ MainWindow::~MainWindow()
 
 void MainWindow::addBookButtonClicked()
 {
-    qDebug() << "Add a new book";
+    this->scanDialog->resetDialog();
     if (this->scanDialog->exec() == QDialog::Accepted) {
         auto currentBook = this->scanDialog->getCurrentBook();
         this->databaseHandler->saveBook(currentBook);
+        ui->addBookButton->setFocus();
     }
 
-    this->databaseHandler->getBooks();
+    this->refreshBooks();
 }
 
 void MainWindow::refreshBooks() {
@@ -70,6 +73,8 @@ void MainWindow::refreshBooks() {
 void MainWindow::filterTextChanged(const QString &text) {
     qDebug() << "Search item: " << text;
     proxyModel->setFilterFixedString(text);
+    proxyModel->setFilterKeyColumn(1);
+    proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
 }
 
 void MainWindow::clearSearch() {

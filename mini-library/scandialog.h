@@ -34,6 +34,7 @@ public:
     ~ScanDialog();
 
     Models::Book getCurrentBook();
+    void resetDialog();
 
 private:
     Ui::ScanDialog *ui;
@@ -43,11 +44,11 @@ private:
 
     void initDialog();
     void resetProgressAndHide();
-    void clearSearchField();
     void clearResultsSection();
     void setProgressIndeterminate();
     void disableSearchControls();
     void enableSearchControls();
+    void selectFirstRow();
 
 private slots:
     void requestBook();
@@ -55,6 +56,9 @@ private slots:
     void setResults();
     void setScanValues(Models::Book& book);
     void setCurrentBook(Models::Book& book);
+    void clearSearchField();
+    void clearSearchResults();
+    void searchRequestAuto(const QString& searchTerm);
 };
 
 #endif // SCANDIALOG_H

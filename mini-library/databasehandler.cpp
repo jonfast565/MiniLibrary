@@ -8,6 +8,14 @@ DatabaseHandler::DatabaseHandler(QObject *parent)
     this->db = db;
 }
 
+DatabaseHandler::~DatabaseHandler() {
+    this->closeDatabase();
+}
+
+void DatabaseHandler::closeDatabase() {
+    this->db->close();
+}
+
 void DatabaseHandler::initializeDatabase() {
     if (!db->open()) {
         QErrorMessage::qtHandler()->showMessage(db->lastError().text());

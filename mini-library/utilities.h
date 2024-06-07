@@ -11,5 +11,6 @@
 
 QList<QString> jsonArrayToQList(const QJsonArray& jsonArray);
 QList<QStandardItem*> getQStandardItemsForRow(const QStandardItemModel* model, int row);
+bool isValidISBN(const QString& isbn);
 
 #endif // UTILITIES_H
