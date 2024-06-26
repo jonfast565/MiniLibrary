@@ -93,7 +93,7 @@ void ScanDialog::requestBook() {
     query.addQueryItem("q", searchValue);
 
     // TODO: Add configuration here, this is insecure
-    query.addQueryItem("key", "***REMOVED***");
+    query.addQueryItem("key", "<<api key here>>");
     url.setQuery(query);
 
     QNetworkRequest request(url);
