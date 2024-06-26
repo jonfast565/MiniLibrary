@@ -18,6 +18,7 @@
 #include <QStandardItemModel>
 
 #include "models.h"
+#include "databasehandler.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -40,6 +41,7 @@ private:
     Ui::ScanDialog *ui;
     QNetworkAccessManager manager;
     QStandardItemModel* searchTableModel;
+    DatabaseHandler* databaseHandler;
     Models::Book currentBook;
 
     void initDialog();
